@@ -5,6 +5,10 @@ const vm = Vue.createApp({
       searchName: "",
       sortedVal: "",
       sortedType: "",
+      // 把升冪降冪改成isAsc，用true/false控制改寫
+      // 每頁要有幾筆資料，在computed內算出要分幾頁，總資料/頁資料，也需要有currPage
+      currPage: 1,
+      perPage: 20,
     };
   },
   created() {
@@ -30,26 +34,28 @@ const vm = Vue.createApp({
         stop.sna.includes(this.searchName)
       );
       const sortedStops = [...defaultStops];
-      let resultStops;
 
       if (this.sortedType === "asc") {
-        if (this.sortedVal === "sbi") {
-          resultStops = [...sortedStops.sort((a, b) => a.sbi - b.sbi)];
-        } else {
-          resultStops = [...sortedStops.sort((a, b) => a.tot - b.tot)];
-        }
+        return sortedStops.sort(
+          (a, b) => a[this.sortedVal] - b[this.sortedVal]
+        );
       } else if (this.sortedType === "desc") {
-        if (this.sortedVal === "sbi") {
-          resultStops = [...sortedStops.sort((a, b) => b.sbi - a.sbi)];
-        } else {
-          resultStops = [...sortedStops.sort((a, b) => b.tot - a.tot)];
-        }
+        return sortedStops.sort(
+          (a, b) => b[this.sortedVal] - a[this.sortedVal]
+        );
       } else {
-        resultStops = [...defaultStops];
+        return sortedStops;
       }
-
-      return resultStops;
     },
+
+    slicedStops: function () {
+      this.totalPage = Math.ceil(this.filteredStops.length / this.perPage);
+      return this.filteredStops.slice(
+        (this.currPage - 1) * this.perPage,
+        this.perPage + (this.currPage - 1) * this.perPage
+      );
+      
+    }
   },
   methods: {
     timeFormat(t) {
@@ -69,5 +75,19 @@ const vm = Vue.createApp({
       this.sortedType = sortType;
       this.sortedVal = sortVal;
     },
+    gotoPage(p) {
+      if (this.currPage === 0 || p === this.totalPage) {
+        return;
+      }
+        if (p === "next") {
+          this.currPage = this.currPage;
+          +1;
+        } else if (p === "prev") {
+          this.currPage = this.currPage - 1;
+        } else {
+          this.currPage = p;
+        }
+      console.log(`this.currPage ${this.currPage} ${p}`)
+    }
   },
 }).mount("#app");

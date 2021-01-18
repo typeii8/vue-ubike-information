@@ -33,7 +33,6 @@
       站點名稱搜尋: <input type="text" v-model="searchName">
     </p>
 
-
     <table class="table table-striped">
       <thead>
         <tr>
@@ -52,7 +51,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="s in filteredStops">
+        <tr v-for="s in slicedStops">
           <td>{{ s.sno }}</td>
           <td>{{ s.sna }}</td>
           <td>{{ s.sarea }}</td>
@@ -61,9 +60,14 @@
           <td>{{ timeFormat(s.mday) }}</td>
         </tr>
       </tbody>
-
     </table>
-
+    <ul class="pagination pagination-sm">
+      <li class="page-item"><a href="#" class="page-link" @click="gotoPage('prev')"> << </a></li>
+      <li class="page-item" v-for="page in totalPage">
+        <a href="#" class="page-link" @click="gotoPage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item"><a href="#" class="page-link" @click="gotoPage('next')"> >> </a></li>
+    </ul>
   </div>
 
   <script src="https://unpkg.com/vue@next"></script>
