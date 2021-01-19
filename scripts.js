@@ -34,6 +34,7 @@ const vm = Vue.createApp({
         stop.sna.includes(this.searchName)
       );
       const sortedStops = [...defaultStops];
+      this.currPage = 1;
 
       if (this.sortedType === "asc") {
         return sortedStops.sort(
@@ -53,8 +54,7 @@ const vm = Vue.createApp({
       return this.filteredStops.slice(
         (this.currPage - 1) * this.perPage,
         this.perPage + (this.currPage - 1) * this.perPage
-      );
-      
+      ); 
     }
   },
   methods: {
@@ -76,17 +76,11 @@ const vm = Vue.createApp({
       this.sortedVal = sortVal;
     },
     gotoPage(p) {
-      if (this.currPage === 0 || p === this.totalPage) {
-        return;
-      }
-        if (p === "next") {
-          this.currPage = this.currPage;
-          +1;
-        } else if (p === "prev") {
-          this.currPage = this.currPage - 1;
-        } else {
-          this.currPage = p;
+        if (p < 1 || p > this.totalPage) {
+          return;
         }
+        this.currPage = p;
+        // }
       console.log(`this.currPage ${this.currPage} ${p}`)
     }
   },
