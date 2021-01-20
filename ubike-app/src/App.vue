@@ -1,55 +1,16 @@
 <template>
   <div id="app">
     <h1>YouBike 臺北市公共自行車即時資訊</h1>
-    <!-- <bike-search @change="onChange"></bike-search> -->
-
-    <bike-search v-model:search-keyword="searchName"></bike-search>
-
-    <bike-list></bike-list>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>場站名稱</th>
-          <th>場站區域</th>
-          <th>目前可用車輛
-            <i class="fa fa-sort-asc" aria-hidden="true" @click="sorted('asc','sbi')"></i>
-            <i class="fa fa-sort-desc" aria-hidden="true" @click="sorted('desc','sbi')"></i>
-          </th>
-          <th>總停車格
-            <i class="fa fa-sort-asc" aria-hidden="true" @click="sorted('asc','tot')"></i>
-            <i class="fa fa-sort-desc" aria-hidden="true" @click="sorted('desc','tot')"></i>
-          </th>
-          <th>資料更新時間</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="s in slicedStops" :key="s">
-          <td>{{ s.sno }}</td>
-          <td>{{ s.sna }}</td>
-          <td>{{ s.sarea }}</td>
-          <td>{{ s.sbi }}</td>
-          <td>{{ s.tot }}</td>
-          <td>{{ timeFormat(s.mday) }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- <ul class="pagination pagination-sm">
-      <li class="page-item">
-        <a href="#" class="page-link" @click="gotoPage(currPage - 1)">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </a>
-      </li>
-      <li class="page-item" :class="{'active': currPage === page}" v-for="page in totalPage" :key="page">
-        <a href="#" class="page-link" @click="gotoPage(page)">{{ page }}</a>
-      </li>
-      <li class="page-item">
-        <a href="#" class="page-link" @click="gotoPage(currPage + 1)">
-          <i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </a>
-      </li>
-    </ul> -->
-    <bike-pagination></bike-pagination>
+    <bike-search v-model="searchName"></bike-search>
+    <bike-list
+      :slicedStops="slicedStops"
+      v-model:sortedVal="sortedVal"
+      v-model:sortedType="sortedType"
+    ></bike-list>
+    <bike-pagination
+      v-model:totalPage="totalPage"
+      v-model:currPage="currPage"
+    ></bike-pagination>
   </div>
 </template>
 
@@ -63,7 +24,7 @@ export default {
   components: {
     BikeSearch,
     BikeList,
-    BikePagination
+    BikePagination,
   },
   data() {
     return {
@@ -97,8 +58,6 @@ export default {
         stop.sna.includes(this.searchName)
       );
       const sortedStops = [...defaultStops];
-      // this.currPage = 1;
-
       if (this.sortedType === "asc") {
         return sortedStops.sort(
           (a, b) => a[this.sortedVal] - b[this.sortedVal]
@@ -127,31 +86,17 @@ export default {
     }
   },
   methods: {
-    onChange(e) { console.log(`=> ${e}`); },
-    timeFormat(t) {
-      var date = [],
-        time = [];
-
-      date.push(t.substr(0, 4));
-      date.push(t.substr(4, 2));
-      date.push(t.substr(6, 2));
-      time.push(t.substr(8, 2));
-      time.push(t.substr(10, 2));
-      time.push(t.substr(12, 2));
-
-      return date.join("/") + " " + time.join(":");
-    },
-    sorted(sortType, sortVal) {
-      this.sortedType = sortType;
-      this.sortedVal = sortVal;
-    },
-    gotoPage(p) {
-        if (p < 1 || p > this.totalPage) {
-          return;
-        }
-        this.currPage = p;
-      console.log(`this.currPage ${this.currPage} ${p}`)
-    }
+    // sorted(sortType, sortVal) {
+    //   this.sortedType = sortType;
+    //   this.sortedVal = sortVal;
+    // },
+    // gotoPage(p) {
+    //     if (p < 1 || p > this.totalPage) {
+    //       return;
+    //     }
+    //     this.currPage = p;
+    //   console.log(`this.currPage ${this.currPage} ${p}`)
+    // }
   },
 }
 </script>
