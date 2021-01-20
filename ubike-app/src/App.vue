@@ -85,19 +85,6 @@ export default {
       this.currPage = 1;
     }
   },
-  methods: {
-    // sorted(sortType, sortVal) {
-    //   this.sortedType = sortType;
-    //   this.sortedVal = sortVal;
-    // },
-    // gotoPage(p) {
-    //     if (p < 1 || p > this.totalPage) {
-    //       return;
-    //     }
-    //     this.currPage = p;
-    //   console.log(`this.currPage ${this.currPage} ${p}`)
-    // }
-  },
 }
 </script>
 

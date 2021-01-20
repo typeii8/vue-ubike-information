@@ -19,7 +19,7 @@
 <script>
 export default {
 	props: ['totalPage', 'currPage'],
-	emit: ['update:currPage'],
+	// emit: ['update:currPage'],
 	methods: {
     gotoPage(p) {
         if (p < 1 || p > this.totalPage) {
