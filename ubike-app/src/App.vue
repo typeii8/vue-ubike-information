@@ -4,8 +4,10 @@
     <bike-search v-model="searchName"></bike-search>
     <bike-list
       :slicedStops="slicedStops"
+      :pinnedStops="pinnedStops"
       v-model:sortedVal="sortedVal"
       v-model:sortedType="sortedType"
+      v-model:pin="pin"
     ></bike-list>
     <bike-pagination
       v-model:totalPage="totalPage"
@@ -33,7 +35,8 @@ export default {
       sortedVal: "",
       sortedType: "",
       currPage: 1,
-      perPage: 20
+      perPage: 20,
+      pin: "市民廣場",
     }
   },
   created() {
@@ -45,6 +48,7 @@ export default {
     // lat：緯度、 lng：經度、 ar：地(中文)、 sareaen：場站區域(英文)、
     // snaen：場站名稱(英文)、 aren：地址(英文)、 bemp：空位數量、 act：全站禁用狀態
     fetch("https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz")
+    // fetch("/ubike-app/src/assets/YouBikeTP.gz")
       .then((res) => res.json())
       .then((json) => {
         // 將 json 轉陣列後存入 this.ubikeStops
@@ -76,14 +80,31 @@ export default {
         this.perPage + (this.currPage - 1) * this.perPage
       ); 
     },
+    pinnedStops: function () {
+      // return this.filteredStops.slice(0, 3);
+      return this.slicedStops.filter((stop) => stop.sna === this.pin);
+    },
     totalPage: function() {
       return Math.ceil(this.filteredStops.length / this.perPage);
     },
   },
-  watch: {
-    filteredStops: function() {
-      this.currPage = 1;
-    }
+  // watch: {
+  //   filteredStops: function() {
+  //     this.currPage = 1;
+  //   }
+  // },
+  methods: {
+    // sorted(sortType, sortVal) {
+    //   this.sortedType = sortType;
+    //   this.sortedVal = sortVal;
+    // },
+    // gotoPage(p) {
+    //     if (p < 1 || p > this.totalPage) {
+    //       return;
+    //     }
+    //     this.currPage = p;
+    //   console.log(`this.currPage ${this.currPage} ${p}`)
+    // }
   },
 }
 </script>
@@ -99,7 +120,17 @@ body {
   cursor: pointer;
 }
 
-.fa:hover {
+th .fa:hover {
   color: red;
+}
+
+.fa-thumb-tack {
+  color: #999;
+  transform: rotate(30deg);
+
+}
+.table-warning .fa-thumb-tack {
+  color: #7E3F0A;
+  transform: rotate(0);
 }
 </style>

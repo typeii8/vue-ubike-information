@@ -1,7 +1,8 @@
 <template>
-	<table class="table table-striped">
+	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
+				<th></th>
 				<th>#</th>
 				<th>場站名稱</th>
 				<th>場站區域</th>
@@ -17,6 +18,17 @@
 			</tr>
 		</thead>
 		<tbody>
+			<bike-list-item
+				v-for="s in pinnedStops"
+				:key="s.id"
+				:id="s.id"
+				:stop-no="s.sno"
+				:stop-name="s.sna"
+				:stop-area="s.sarea"
+				:stop-sbi="s.sbi"
+				:stop-total="s.tot"
+				:stop-time="timeFormat(s.mday)"
+			></bike-list-item>
 			<bike-list-item
 				v-for="s in slicedStops"
 				:key="s.id"
@@ -35,8 +47,8 @@
 <script>
 import BikeListItem from './BikeListItem.vue'
 export default {
-  components: { BikeListItem },
-	props: ['slicedStops','sortedVal','sortedType'],
+	components: { BikeListItem },
+	props: ['slicedStops','sortedVal','sortedType', 'pinnedStops'],
 	methods: {
     timeFormat(t) {
       var date = [],

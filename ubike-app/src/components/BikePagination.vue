@@ -1,15 +1,15 @@
 <template>
 	<ul class="pagination pagination-sm">
 		<li class="page-item">
-			<a href="#" class="page-link" @click="gotoPage(currPage - 1)">
+			<a href="#" class="page-link" @click.prevent="gotoPage(currPage - 1)">
 				<i class="fa fa-arrow-left" aria-hidden="true"></i>
 			</a>
 		</li>
 		<li class="page-item" :class="{'active': currPage === page}" v-for="page in totalPage" :key="page">
-			<a href="#" class="page-link" @click="gotoPage(page)">{{ page }}</a>
+			<a href="#" class="page-link" @click.prevent="gotoPage(page)">{{ page }}</a>
 		</li>
 		<li class="page-item">
-			<a href="#" class="page-link" @click="gotoPage(currPage + 1)">
+			<a href="#" class="page-link" @click.prevent="gotoPage(currPage + 1)">
 				<i class="fa fa-arrow-right" aria-hidden="true"></i>
 			</a>
 		</li>
